@@ -48,7 +48,7 @@ var availableEnemiesClick = function() {
 
 	$('#fightSection').show();
 	defender = data_tag;
-	charHtml = allCharacters[defender].createHtmlContent('evil');
+	charHtml = allCharacters[defender].createHtmlContent('defender');
 
 	$('#defender .row1').append(charHtml);
 	$('#defender').show();
@@ -78,7 +78,7 @@ $("#availableCharacters .character").click(function() {
 		for (var i in availableEnemies) {
 			var charName = availableEnemies[i];
 
-			charHtml = allCharacters[charName].createHtmlContent('neutral');
+			charHtml = allCharacters[charName].createHtmlContent('evil');
 			$('#availableEnemies .row').append(charHtml);
 		}
 		$('#availableEnemies .character').click(availableEnemiesClick)
