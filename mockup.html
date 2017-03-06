@@ -5,7 +5,7 @@
 	<link rel="stylesheet" type="text/css" href="assets/css/reset.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
-    <script type="text/javascript" src="assets/js/lodash.min.js"></script>
+
 </head>
 <body>
 
@@ -15,9 +15,9 @@
 </div>
 <div id="availableCharacters" class="container">
 	<div class = "row">
-		<div class="character neutral">
+		<div  class="character neutral" data="obi">
 			<span>Obi-Wan Kenobi</span>
-			<img src= "http://placehold.it/120x80">
+			<img id="test" src= "http://placehold.it/120x80">
 			<span>120</span>
 		</div>
 		<div class="character neutral">
@@ -39,8 +39,8 @@
 </div>
 
 <div id="yourCharacter" class="container">
-	<h2>Your Character</h2>
 	<div class = "row">
+	<h2>Your Character</h2>
 		<div class="character neutral">
 			<span>Obi-Wan Kenobi</span>
 			<img src= "http://placehold.it/120x80">
@@ -50,9 +50,9 @@
 </div>
 
 
-<div id="enemies" class="container">
-	<h2>Enemies Available To Attack</h2>
+<div id="availableEnemies" class="container">
 	<div class = "row">
+		<h2>Enemies Available To Attack</h2>
 		<div class="character evil">
 			<span>Luke Skywalker</span>
 			<img src= "http://placehold.it/120x80">
@@ -62,22 +62,37 @@
 </div>
 
 <div id="fightSection" class="container">
-	<h2>Fight Section</h2>
-	<button type="button" class="btn btn-danger">Attack</button>
+	<div class="row">
+		<h2>Fight Section</h2>
+		<button type="button" class="btn btn-danger">Attack</button>
+	</div>
 </div>
 
 <div id="defender" class="container">
-	<h2>Defender</h2>
 	<div class = "row">
+		<h2>Defender</h2>
 		<div class="character defender">
 			<span>Luke Skywalker</span>
 			<img src= "http://placehold.it/120x80">
 			<span>120</span>
 		</div>
 	</div>
+	<div class="row">
+		<p id="yourAttack">You attacked with 120 points</p>
+		<p id="enemyCounterAttack">You are attacked with 20 points</p>
+	</div>
 </div>
 
+<div id="restart" class="container">
+	<div class="row">
+		<button type="button" class="btn btn-primary">Restart</button>
+	</div>
+</div>
 
-
+<script type="text/javascript" src="assets/js/lodash.min.js"></script>
+<script type="text/javascript" src="assets/js/jquery.min.js"></script>
+<script type="text/javascript" src="assets/js/attackFuncs.js"></script>
+<script type="text/javascript" src="assets/js/character.js"></script>
+<script type="text/javascript" src="assets/js/game-rpg.js"></script>
 </body>
 </html>
