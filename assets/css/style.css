@@ -44,3 +44,12 @@ h1 {
 .defender {
 	background-color:black;
 }
+
+#defender p {
+	margin-bottom: 1.5px
+}
+
+#restart {
+	margin-top:5px;
+	margin-bottom:30px;
+}
