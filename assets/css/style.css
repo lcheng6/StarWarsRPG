@@ -1,0 +1,36 @@
+body {
+	background-color: black;
+	background-image: url("../images/background.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+h1 {
+
+}
+
+.character {
+	border-style:solid;
+	border-color:green;
+	border-width: 2px;
+	width:150px;
+	float:left;
+	background-color:white;
+}
+
+.character img{
+	margin:auto;
+	display:block;
+}
+
+.character span{
+	text-align:center;
+	display:block;
+}
+
+.neutral {
+	background-color: white;
+}
+
+.evil {
+	background-color:red;
+}
