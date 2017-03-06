@@ -1,1 +1,1 @@
-# StarWarRPG
+# StarWarsRPG
