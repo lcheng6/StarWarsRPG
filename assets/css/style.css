@@ -48,8 +48,12 @@ h1 {
 #defender p {
 	margin-bottom: 1.5px
 }
+#defender span {
+	font-size: 20px;
+}
 
 #restart {
 	margin-top:5px;
 	margin-bottom:30px;
 }
+

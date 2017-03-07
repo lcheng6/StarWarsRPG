@@ -1,12 +1,14 @@
 'use strict'
-var character = function(name, characterDataTag, startHealthUnits, cardImg, musicTrack, attackFunc, attackBackFunc) {
+var character = function(name, characterDataTag, 
+	startHealthUnits, cardImg, 
+	musicTrack, attackFunc, counterAttackFunc) {
 	var priv = {
 		name:name,
 		characterDataTag: characterDataTag,
 		healthUnit: startHealthUnits,
 		cardImg:cardImg,
 		attackFunc: attackFunc,
-		attackBackFunc: attackBackFunc
+		counterAttackFunc: counterAttackFunc
 	};
 
 	return {
@@ -33,9 +35,20 @@ var character = function(name, characterDataTag, startHealthUnits, cardImg, musi
 			return div1;
 
 		},
-		getCurrentHealthUnit: function() {
+		getHealthUnit: function() {
 			return priv.healthUnit;
 		},
-
+		setHealthUnit: function(healthUnit) {
+			priv.healthUnit = healthUnit;
+		},
+		calcAttackPoints:function() {
+			return priv.attackFunc.attackPoints();
+		},
+		calcCounterAttackPoints:function() {
+			return priv.counterAttackFunc.counterAttackPoints();
+		},
+		getName: function() {
+			return priv.name;
+		}
 	}
 }

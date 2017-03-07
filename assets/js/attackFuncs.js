@@ -1,8 +1,23 @@
-var attackFunc1 = function() {
-	var baseLevel  =1;
-
+var attackFunc = function(baseLevel, randIncrem) {
+	var myBaseLevel = baseLevel;
+	var myRandIncrem = randIncrem;
+	return {
+		attackPoints: function() {
+			result = myBaseLevel;
+			myBaseLevel = myBaseLevel + Math.ceil(Math.random() * myRandIncrem);
+			return result;
+		}
+	} 
 }
 
-var defendFunc1 = function() {
-	var baseLevel = 1;
+var counterAttackFunc = function(baseLevel, randIncrem) {
+	var myBaseLevel = baseLevel;
+	var myRandIncrem = randIncrem
+	return {
+		counterAttackPoints: function () {
+			result = myBaseLevel;
+			myBaseLevel = myBaseLevel + Math.ceil(Math.random() * myRandIncrem);
+			return result;
+		}
+	}
 }
