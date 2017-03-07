@@ -53,6 +53,9 @@ var character = function(name, characterDataTag,
 		},
 		getName: function() {
 			return priv.name;
+		},
+		resetAttackSpeed: function() {
+			priv.attackFunc.reset();
 		}
 	}
 }

@@ -1,13 +1,13 @@
 'use strict'
 var allCharacters = {
-	obi:character("Obi-Wan Kenobi", "obi", 120, "http://placehold.it/120x80", 
+	obi:character("Obi-Wan Kenobi", "obi", 140, "http://placehold.it/120x80", 
 		null, attackFunc(5, 20), counterAttackFunc(15, 0)),
 	darthSid:character("Darth Sidious", "darthSid", 100, "http://placehold.it/120x80", 
-		null, attackFunc(10, 15), counterAttackFunc(20, 0)),
+		null, attackFunc(10, 15), counterAttackFunc(14, 0)),
 	darthMaul:character("Darth Maul", "darthMaul", 150, "http://placehold.it/120x80", 
-		null, attackFunc(8, 13), counterAttackFunc(18, 0)),
+		null, attackFunc(8, 13), counterAttackFunc(17, 0)),
 	luke:character("LukeSkyWalker", "luke", 180, "http://placehold.it/120x80", 
-		null, attackFunc(15, 5), counterAttackFunc(17, 0)),
+		null, attackFunc(15, 5), counterAttackFunc(15, 0)),
 }
 var allCharNames = ['obi', 'darthSid', 'darthMaul', 'luke'];
 var myCharacter = null;
@@ -15,7 +15,7 @@ var availableEnemies = [];
 var defender = null;
 var defeatedEnemies = [];
 
-var starWarsThemeAudio, lightSaberAudio; 
+var starWarsThemeAudio, lightSaberClashAudio, lightSaberOnAudio; 
 
 
 //Initialize the available characters list:
@@ -50,7 +50,7 @@ $('#restart').hide();
 var gameState = 0;
 
 var RestartBtnClick = function() {
-	if (gameState == 5) {
+	if (gameState === 5 || gameState === 3) {
 		location.reload();	
 	}
 	
@@ -62,13 +62,15 @@ var AttackBtnClick = function() {
 		var enemyCounterAttackHtml;
 		var winLoseMessageHtml;
 		var myAttackPoints = allCharacters[myCharacter].calcAttackPoints();
-		var enemyAttackPoints = allCharacters[defender].calcAttackPoints();
+		var enemyAttackPoints = allCharacters[defender].calcCounterAttackPoints();
 		myAttackHtml = "You attacked " + allCharacters[defender].getName() + " for " + myAttackPoints.toString() + " damaage";
 		enemyCounterAttackHtml = allCharacters[defender].getName() + " attacked you for " + enemyAttackPoints.toString() + " damage";
 
 
-		//Play the lightSaber sound
-		lightSaberAudio.play();
+		//Play the lightSaber fight sound, if necessary, stop the previous play. 
+		lightSaberClashAudio.pause();
+		lightSaberClashAudio.currentTime =0;
+		lightSaberClashAudio.play();
 
 		//Update the attack and attacked messages 
 		$('#myAttack').text(myAttackHtml);
@@ -121,6 +123,8 @@ var AttackBtnClick = function() {
 				winLoseMessageHtml = "You have defeated " + allCharacters[defender].getName() + ", you can choose to fight another enemy"
 				$('#winLoseMessage').text(winLoseMessageHtml);
 				allCharacters[myCharacter].resetHealthBackToInitial();
+				allCharacters[myCharacter].resetAttackSpeed();
+
 				gameState = 4;
 			}
 		}	
@@ -129,7 +133,6 @@ var AttackBtnClick = function() {
 
 var availableEnemiesClick = function() {
 	if (gameState === 1 || gameState === 4) {
-		//first match up.
 		//clear the winLoseMessage 
 
 		$('#winLoseMessage').empty();
@@ -150,6 +153,12 @@ var availableEnemiesClick = function() {
 		$('#defender .row1').append(charHtml);
 		$('#defender').show();
 
+
+		//refresh the display of my character
+		$('#myCharacter .row').empty();
+		var myCharHtml = allCharacters[myCharacter].createHtmlContent("neutral");
+		$('#myCharacter .row').append(myCharHtml);
+
 		//remove the selected enemy from the available enemies list. 
 		$('#availableEnemies .character').remove();
 		availableEnemies = _.without(availableEnemies, data_tag);
@@ -160,6 +169,9 @@ var availableEnemiesClick = function() {
 		}
 		$('#availableEnemies .character').click(availableEnemiesClick)
 		$('#availableEnemies').show();
+
+		//get ready to fight. play the light saber turn on audio. 
+		lightSaberOnAudio.play();
 		gameState = 2;
 	}
 }
@@ -216,8 +228,11 @@ $('#defender .character').click(function() {
 
 $(document).ready(function() {
 
-	lightSaberAudio = document.createElement('audio');
-	//lightSaberAudio.setAttribute('src', '####');
+	lightSaberOnAudio = document.createElement('audio');
+	lightSaberOnAudio.setAttribute('src', 'assets/audio/Lightsaber Turn On.mp3');
+
+	lightSaberClashAudio = document.createElement('audio');
+	lightSaberClashAudio.setAttribute('src', 'assets/audio/Lightsaber Clash.mp3');
 
 	starWarsThemeAudio = document.createElement('audio');
 	starWarsThemeAudio.setAttribute('src', 'assets/audio/star-wars-theme.mp3');
