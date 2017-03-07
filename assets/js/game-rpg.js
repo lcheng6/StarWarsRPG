@@ -57,6 +57,7 @@ var AttackBtnClick = function() {
 		myAttackHtml = "You attacked " + allCharacters[defender].getName() + " for " + myAttackPoints.toString() + " damaage";
 		enemyCounterAttackHtml = allCharacters[defender].getName() + " attacked you for " + enemyAttackPoints.toString() + " damage";
 
+		//Update the attack and attacked messages 
 		$('#myAttack').text(myAttackHtml);
 		$('#enemyCounterAttack').text(enemyCounterAttackHtml);
 
@@ -66,6 +67,16 @@ var AttackBtnClick = function() {
 
 		console.log(myCharacter + " Health: " + allCharacters[myCharacter].getHealthUnit().toString());
 		console.log(defender + " Health: " + allCharacters[defender].getHealthUnit().toString());
+
+		//Update my character health and defender health
+		$('#myCharacter .row').empty();
+		var myCharHtml = allCharacters[myCharacter].createHtmlContent("neutral");
+		$('#myCharacter .row').append(myCharHtml);
+
+		$('#defender .character').remove();
+		charHtml = allCharacters[defender].createHtmlContent('defender');
+		$('#defender .row1').append(charHtml);
+
 
 		if (allCharacters[myCharacter].getHealthUnit() <= 0) {
 			//I lose
@@ -80,13 +91,15 @@ var AttackBtnClick = function() {
 			console.log("I Win");
 			winLoseMessageHtml = "You have defeated " + allCharacters[defender].getName() + ", you can choose to fight another enemy"
 			$('#winLoseMessage').text(winLoseMessageHtml);
+			allCharacters[myCharacter].resetHealthBackToInitial();
 			gameState = 4;
 		}	
 	}
 }
 
 var availableEnemiesClick = function() {
-	if (gameState === 1) {
+	if (gameState === 1 || gameState === 4) {
+		//first match up.
 		//clear the winLoseMessage 
 
 		$('#winLoseMessage').empty();
@@ -94,15 +107,29 @@ var availableEnemiesClick = function() {
 		$('#enemyCounterAttack').empty();
 
 		var data_tag = $(this).attr('data')
-		console.log("yourcharacter: " + data_tag)
-
+		console.log("selected enemy: " + data_tag)
 		$('#fightSection').show();
+
+
+		//clear and set the defender
+		$('#defender .character').remove();
 		defender = data_tag;
 		charHtml = allCharacters[defender].createHtmlContent('defender');
 		$('#fightSection button').click(AttackBtnClick);
 
 		$('#defender .row1').append(charHtml);
 		$('#defender').show();
+
+		//remove the selected enemy from the available enemies list. 
+		$('#availableEnemies .character').remove();
+		availableEnemies = _.without(availableEnemies, data_tag);
+		for (var i in availableEnemies) {
+			var charName = availableEnemies[i];
+			charHtml = allCharacters[charName].createHtmlContent('evil');
+			$('#availableEnemies .row').append(charHtml);
+		}
+		$('#availableEnemies .character').click(availableEnemiesClick)
+		$('#availableEnemies').show();
 		gameState = 2;
 	}
 }
@@ -126,7 +153,7 @@ $("#availableCharacters .character").click(function() {
 
 		$('#availableCharacters').hide();
 
-		var myCharHtml = allCharacters[myCharacter].createHtmlContent();
+		var myCharHtml = allCharacters[myCharacter].createHtmlContent("neutral");
 		$('#myCharacter .row').append(myCharHtml);
 		$('#myCharacter').show();
 

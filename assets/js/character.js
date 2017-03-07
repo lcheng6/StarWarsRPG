@@ -8,7 +8,8 @@ var character = function(name, characterDataTag,
 		healthUnit: startHealthUnits,
 		cardImg:cardImg,
 		attackFunc: attackFunc,
-		counterAttackFunc: counterAttackFunc
+		counterAttackFunc: counterAttackFunc,
+		initialHealth: startHealthUnits,
 	};
 
 	return {
@@ -34,6 +35,9 @@ var character = function(name, characterDataTag,
 
 			return div1;
 
+		},
+		resetHealthBackToInitial: function() {
+			priv.healthUnit = priv.initialHealth;
 		},
 		getHealthUnit: function() {
 			return priv.healthUnit;
