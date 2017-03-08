@@ -6,7 +6,7 @@ var allCharacters = {
 		null, attackFunc(10, 15), counterAttackFunc(14, 0)),
 	darthMaul:character("Darth Maul", "darthMaul", 150, "assets/images/DarthMaul.png", 
 		null, attackFunc(8, 13), counterAttackFunc(17, 0)),
-	luke:character("LukeSkyWalker", "luke", 180, "assets/images/LukeSkyWalker.png", 
+	luke:character("LukeSkyWalker", "luke", 180, "assets/images/LukeSkywalker.png", 
 		null, attackFunc(15, 5), counterAttackFunc(15, 0)),
 }
 var allCharNames = ['obi', 'genGrevious', 'darthMaul', 'luke'];
