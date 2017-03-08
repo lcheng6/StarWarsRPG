@@ -1,15 +1,15 @@
 'use strict'
 var allCharacters = {
-	obi:character("Obi-Wan Kenobi", "obi", 140, "http://placehold.it/120x80", 
+	obi:character("Obi-Wan Kenobi", "obi", 140, "assets/images/ObiWanKenobi.png", 
 		null, attackFunc(5, 20), counterAttackFunc(15, 0)),
-	darthSid:character("Darth Sidious", "darthSid", 100, "http://placehold.it/120x80", 
+	genGrevious:character("Darth Sidious", "genGrevious", 100, "assets/images/GeneralGrevious.png", 
 		null, attackFunc(10, 15), counterAttackFunc(14, 0)),
-	darthMaul:character("Darth Maul", "darthMaul", 150, "http://placehold.it/120x80", 
+	darthMaul:character("Darth Maul", "darthMaul", 150, "assets/images/DarthMaul.png", 
 		null, attackFunc(8, 13), counterAttackFunc(17, 0)),
-	luke:character("LukeSkyWalker", "luke", 180, "http://placehold.it/120x80", 
+	luke:character("LukeSkyWalker", "luke", 180, "assets/images/LukeSkyWalker.png", 
 		null, attackFunc(15, 5), counterAttackFunc(15, 0)),
 }
-var allCharNames = ['obi', 'darthSid', 'darthMaul', 'luke'];
+var allCharNames = ['obi', 'genGrevious', 'darthMaul', 'luke'];
 var myCharacter = null;
 var availableEnemies = [];
 var defender = null;
@@ -22,7 +22,7 @@ var starWarsThemeAudio, lightSaberClashAudio, lightSaberOnAudio;
 
 var charHtml = allCharacters["obi"].createHtmlContent("neutral");
 $('#availableCharacters .row').append(charHtml);
-charHtml = allCharacters["darthSid"].createHtmlContent("neutral");
+charHtml = allCharacters["genGrevious"].createHtmlContent("neutral");
 $('#availableCharacters .row').append(charHtml);
 charHtml = allCharacters["darthMaul"].createHtmlContent("neutral");
 $('#availableCharacters .row').append(charHtml);
