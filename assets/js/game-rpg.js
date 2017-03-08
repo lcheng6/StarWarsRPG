@@ -1,26 +1,28 @@
 'use strict'
 var allCharacters = {
-	obi:character("Obi-Wan Kenobi", "obi", 120, "assets/images/ObiWanKenobi.png", 
+	obi:character("Obi-Wan Kenobi", "obi", 140, "http://placehold.it/120x80", 
 		null, attackFunc(5, 20), counterAttackFunc(15, 0)),
-	genGrevious:character("General Grevious", "genGrevious", 100, "assets/images/GeneralGrevious.png", 
-		null, attackFunc(10, 15), counterAttackFunc(20, 0)),
-	darthMaul:character("Darth Maul", "darthMaul", 150, "assets/images/DarthMaul.png", 
-		null, attackFunc(8, 13), counterAttackFunc(18, 0)),
-	luke:character("LukeSkyWalker", "luke", 180, "assets/images/LukeSkywalker.png", 
-		null, attackFunc(15, 5), counterAttackFunc(17, 0)),
+	darthSid:character("Darth Sidious", "darthSid", 100, "http://placehold.it/120x80", 
+		null, attackFunc(10, 15), counterAttackFunc(14, 0)),
+	darthMaul:character("Darth Maul", "darthMaul", 150, "http://placehold.it/120x80", 
+		null, attackFunc(8, 13), counterAttackFunc(17, 0)),
+	luke:character("LukeSkyWalker", "luke", 180, "http://placehold.it/120x80", 
+		null, attackFunc(15, 5), counterAttackFunc(15, 0)),
 }
-var allCharNames = ['obi', 'genGrevious', 'darthMaul', 'luke'];
+var allCharNames = ['obi', 'darthSid', 'darthMaul', 'luke'];
 var myCharacter = null;
 var availableEnemies = [];
 var defender = null;
 var defeatedEnemies = [];
+
+var starWarsThemeAudio, lightSaberClashAudio, lightSaberOnAudio; 
 
 
 //Initialize the available characters list:
 
 var charHtml = allCharacters["obi"].createHtmlContent("neutral");
 $('#availableCharacters .row').append(charHtml);
-charHtml = allCharacters["genGrevious"].createHtmlContent("neutral");
+charHtml = allCharacters["darthSid"].createHtmlContent("neutral");
 $('#availableCharacters .row').append(charHtml);
 charHtml = allCharacters["darthMaul"].createHtmlContent("neutral");
 $('#availableCharacters .row').append(charHtml);
@@ -41,11 +43,18 @@ $('#restart').hide();
 //2: have chosen a enemy,and is fighting, fight until done move to state 3
 //3: fight is done.  lose => show restart button gameState 5, win => gameState 4
 //4: choose another character, reset current play health -> return to 1
+//5: show restart, and if restart button is clicked, refresh page.  
 
 //restartBtnClick 
 
 var gameState = 0;
 
+var RestartBtnClick = function() {
+	if (gameState === 5 || gameState === 3) {
+		location.reload();	
+	}
+	
+}
 
 var AttackBtnClick = function() {
 	if(gameState === 2) {
@@ -53,9 +62,13 @@ var AttackBtnClick = function() {
 		var enemyCounterAttackHtml;
 		var winLoseMessageHtml;
 		var myAttackPoints = allCharacters[myCharacter].calcAttackPoints();
-		var enemyAttackPoints = allCharacters[defender].calcAttackPoints();
+		var enemyAttackPoints = allCharacters[defender].calcCounterAttackPoints();
 		myAttackHtml = "You attacked " + allCharacters[defender].getName() + " for " + myAttackPoints.toString() + " damaage";
 		enemyCounterAttackHtml = allCharacters[defender].getName() + " attacked you for " + enemyAttackPoints.toString() + " damage";
+
+
+		//Play the lightSaber fight sound, if necessary, stop the previous play. 
+		lightSaberClashAudio.play();
 
 		//Update the attack and attacked messages 
 		$('#myAttack').text(myAttackHtml);
@@ -85,21 +98,39 @@ var AttackBtnClick = function() {
 			$('#winLoseMessage').text(winLoseMessageHtml);
 			gameState = 3;
 
+			$('#restart button').click(RestartBtnClick);
+			$('#restart').show();
+
 		}
-		if (allCharacters[defender].getHealthUnit() <=0 ) {
+		else if (allCharacters[defender].getHealthUnit() <=0 ) {
 			//I Win
 			console.log("I Win");
-			winLoseMessageHtml = "You have defeated " + allCharacters[defender].getName() + ", you can choose to fight another enemy"
-			$('#winLoseMessage').text(winLoseMessageHtml);
-			allCharacters[myCharacter].resetHealthBackToInitial();
-			gameState = 4;
+			
+
+			if(availableEnemies.length == 0) {
+				//all enemies are defeated 
+				gameState = 5;
+				winLoseMessageHtml = "You have defeated all who come before you.  You are the chosen one!!!"
+				$('#winLoseMessage').text(winLoseMessageHtml);
+				$('#restart button').click(RestartBtnClick);
+				$('#restart').show();
+				starWarsThemeAudio.play();
+			}
+			else {
+				//there are still enemies left. 
+				winLoseMessageHtml = "You have defeated " + allCharacters[defender].getName() + ", you can choose to fight another enemy"
+				$('#winLoseMessage').text(winLoseMessageHtml);
+				allCharacters[myCharacter].resetHealthBackToInitial();
+				allCharacters[myCharacter].resetAttackSpeed();
+
+				gameState = 4;
+			}
 		}	
 	}
 }
 
 var availableEnemiesClick = function() {
 	if (gameState === 1 || gameState === 4) {
-		//first match up.
 		//clear the winLoseMessage 
 
 		$('#winLoseMessage').empty();
@@ -120,6 +151,12 @@ var availableEnemiesClick = function() {
 		$('#defender .row1').append(charHtml);
 		$('#defender').show();
 
+
+		//refresh the display of my character
+		$('#myCharacter .row').empty();
+		var myCharHtml = allCharacters[myCharacter].createHtmlContent("neutral");
+		$('#myCharacter .row').append(myCharHtml);
+
 		//remove the selected enemy from the available enemies list. 
 		$('#availableEnemies .character').remove();
 		availableEnemies = _.without(availableEnemies, data_tag);
@@ -130,14 +167,15 @@ var availableEnemiesClick = function() {
 		}
 		$('#availableEnemies .character').click(availableEnemiesClick)
 		$('#availableEnemies').show();
+
+		//get ready to fight. play the light saber turn on audio. 
+		lightSaberOnAudio.play();
 		gameState = 2;
 	}
 }
 
 
-var RestartBtnClick = function() {
 
-}
 var yourCharacterClick = function() {
 	var data_tag = $(this.attr('data'))
 	console.log("yourcharacter: " + data_tag)
@@ -172,17 +210,6 @@ $("#availableCharacters .character").click(function() {
 });
 
 
-// $('#yourCharacter .character').click(function() {
-// 	var data_tag = $(this.attr('data'))
-// 	console.log("yourcharacter: " + data_tag)
-
-// })
-
-
-
-// $('#availableEnemies .character').click()
-
-
 var fightSectionClick = function () {
 	var data_tag = $(this).attr('data')
 }
@@ -196,3 +223,16 @@ $('#defender .character').click(function() {
 	
 })
 
+
+$(document).ready(function() {
+
+	lightSaberOnAudio = document.createElement('audio');
+	lightSaberOnAudio.setAttribute('src', 'assets/audio/Lightsaber Turn On.mp3');
+
+	lightSaberClashAudio = document.createElement('audio');
+	lightSaberClashAudio.setAttribute('src', 'assets/audio/Lightsaber Clash.mp3');
+
+	starWarsThemeAudio = document.createElement('audio');
+	starWarsThemeAudio.setAttribute('src', 'assets/audio/star-wars-theme.mp3');
+
+});
